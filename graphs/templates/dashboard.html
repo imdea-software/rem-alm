@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contentplaceholder %}
+<style>
+.charts{
+  margin-left: 50px;
+  padding-left: 50px;
+}
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col s6 pull-s5">
+       <p> Elige un equipo para poder visualizar los puertos </p>   
+    </div>
+  </div>
+  <div class="row">
+  <div class="section col s6 pull-s5">
+        <form action="" id="portForm" name="portForm" method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="input-field col s6">
+              <select id="address" name="address">
+                <option selected>Elige un equipo</option>
+                <option value="172.20.237.90">CIEMAT-AL-AD-04 (172.20.237.90)</option>
+                <option value="172.20.237.86">CSIC-AL-AD-03 (172.20.237.86)</option>
+              </select>
+              <label for="address">Equipo:</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <select id="port" name="port">
+                  <option selected>Seleccionar el puerto</option> 
+              </select>
+              <label for="port">Puerto: </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <select class=""  id="type" name="type">
+                    <option value="af" selected>Automático</option>
+                    <option value="fa">Manual</option>
+                </select>
+                <label for="petition">Tipo: </label>
+                </div>
+              </div>
+                    <div class="col s6">
+                    <button type="submit" class="btn waves-effect" id="applybutton">Aceptar</button>
+                  </div>
+
+      </form>
+    </div>
+</div>
+  <div class="row charts">
+    <div class="col s6 pull-s7">
+          <p class="" name="port_name" id="port_name"></p>
+          <p id="port_tfa" name="port_tfa"></p>
+          <div class="chart-container">
+            <div id="chart" name="chart" class=""></div>  
+        </div>
+      </div>
+    </div>  
+  </div>
+</div>
+
+{% endblock %}
+
+{% block jsbottom %}
+<script src="{% static 'script.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+ $(document).ready(function(){
+    var ports_data = {
+        "172.20.237.90":[
+            {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1"},
+            {"2" : "CIEMAT-URJC-IMDEA NETWORK - F2"},
+            {"3" : "Imdea Software F1"},
+            {"4" : "Imdea Software F2"},
+            {"5" : "UCM F1"},
+            {"6" : "UCM F2"},
+            {"7" : "CIB F1"},
+            {"8" : "CIB F2"},
+            {"9" : "UNED F1"},
+            {"10" : "UNED F2"},
+            {"11" : "Casa Velázquez F1"},
+            {"12" : "Casa Velázquez F2"},
+            {"13" : "UPM F1"},
+            {"14" : "UPM F2"},
+            {"15" : "UAM F1"},
+            {"16" : "UAM F2"}
+                       
+    ],
+        "172.20.237.86":[
+            {"1" : "CSIC - UC3M - IMDEA NETWORK - F1"},
+            {"2" : "CSIC - UC3M - IMDEA NETWORK - F2"},
+            {"3" : "CSICJO F1"},
+            {"4" : "CSICJO F2"},
+            {"5" : "UCM F1"},
+            {"6" : "UCM F2"}
+    ]  
+    }
+
+const selectElement = document.getElementById('address')
+
+  selectElement.addEventListener('change', function() {
+  var min = 1
+  var address = selectElement.value;
+  var select = document.getElementById('port'); 
+
+
+  for (var i=0; i<=17; i++) {
+      $('#port').children('option[value="'+i+'"]').remove();
+  }
+  for (var i=0;i<ports_data[address].length; i++, min++){
+        var opt = document.createElement('option');
+        opt.value = min;
+        opt.innerHTML = ports_data[address][i][min];
+
+        select.appendChild(opt);
+        var instances = M.FormSelect.init(select, opt);
+    }
+})
+
+  });
+
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+};
+
+// usando jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+  function csrfSafeMethod(method) {
+        // estos métodos no requieren CSRF
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    };
+
+
+ $("#portForm").on('submit', function(event){
+      document.getElementById('applybutton').disabled=true; 
+      /* document.getElementById('applybutton').innerHTML='Recibiendo información...'; */
+      var url = "{% url 'ajax-alm' %}";
+      var form = document.querySelector("[name='portForm']")
+      var port = form.elements.port.value;
+      var address = form.elements.address.value;
+      var type = form.elements.type.value;
+      var csrftoken = getCookie('csrftoken');
+      $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+}
+  });
+  $.ajax({
+      url : url,
+      data : {
+        "port": port,
+        "address":address,
+        "type" : type
+      },
+      type : "POST",
+      dataType:"json",
+      success: function(response){  
+          if(response['keys'] && response['value1'] && response['value2']){
+            document.getElementById('chart').innerHTML=''
+            var keys = response['keys'];
+            var value1 = response['value1'];
+            var value2 = response['value2'];
+            var portinfo = response['port_info']
+            var options = {
+                chart: {
+                  height: 550,
+                  width: 1500,
+                  type: "line",
+                  stacked: false
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                colors: ["#FF1654", "#247BA0"],
+                series: [
+                  {
+                    name: "Finger Print",
+                    data: value1
+                  },
+                  {
+                    name: "Fault analysis",
+                    data: value2
+                  }
+                ],
+                stroke: {
+                  width: [4, 4]
+                },
+                plotOptions: {
+                  bar: {
+                    columnWidth: "20%"
+                  }
+                },
+                xaxis: {
+                  categories: keys,
+                },
+                yaxis: [
+                  {
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#FF1654"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#FF1654"
+                      }
+                    },
+                    title: {
+                      text: "Finger Print",
+                      style: {
+                        color: "#FF1654"
+                      }
+                    }
+                  },
+                  {
+                    opposite: true,
+                    axisTicks: {
+                      show: true
+                    },
+                    axisBorder: {
+                      show: true,
+                      color: "#247BA0"
+                    },
+                    labels: {
+                      style: {
+                        colors: "#247BA0"
+                      }
+                    },
+                    title: {
+                      text: "Fault analysis",
+                      style: {
+                        color: "#247BA0"
+                      }
+                    }
+                  }
+                ],
+                tooltip: {
+                  shared: false,
+                  intersect: true,
+                  x: {
+                    show: false
+                  }
+                },
+                legend: {
+                  horizontalAlign: "left",
+                  offsetX: 40
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+
+            document.getElementById('applybutton').innerHTML='Aceptar';
+            document.getElementById('applybutton').disabled=false;
+            var name = portinfo[23] 
+            var tfa = portinfo[4]
+            if (response['value1'] == null | !response['value1'] == null){
+              document.getElementById('port_name').innerHTML='No hay información disponible...';
+              document.getElementById('chart').innerHTML='';
+
+            }else {
+              var dateArray = tfa.split(' ');
+              var date = dateArray[4]
+              var time = dateArray[5];
+              var fulldate = (date + ' ' + time);
+              var dateobj = new Date(fulldate);
+              document.getElementById('port_name').innerHTML=portinfo[23];
+              document.getElementById('port_tfa').innerHTML=dateobj.toUTCString();
+              
+            }
+            
+            
+          }else{
+            if (response['value1'] == null | !response['value1'] == null){
+            document.getElementById('port_name').innerHTML='No hay información disponible...';
+            document.getElementById('port_tfa').innerHTML='';
+            document.getElementById('chart').innerHTML='';
+            $('#applybutton').removeAttr('disabled');
+          }  
+          }
+        },
+        error: function(){
+          document.getElementById('curve_chart').innerHTML='Ha habido un error en su petición porfavor contacte con RediMadrid';
+            }
+          });
+        event.preventDefault();
+}) 
+
+</script>
+
+{% endblock %}
+

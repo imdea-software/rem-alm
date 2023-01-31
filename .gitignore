@@ -1,0 +1,5 @@
+/env/
+*.pyc
+core/migrations/
+core/__pychache__
+graphs/.env
