@@ -16,13 +16,17 @@ def ajax_alm_graph(request):
         port = request.POST.get('port')
         address = request.POST.get('address')
         typeof = request.POST.get('type')
-        port_info, value1, value2, keys = get_graphs_info(port,address,typeof)
+        value1, value2, keys, faultanalysis, fingerprint, fp_event, fa_event, portname = get_graphs_info(port,address,typeof)
             ##parsear hora para que devuelva la actual
         data = {
             'keys':keys,
             'value1': value1,
             'value2' : value2,
-            'port_info' : port_info,
+            'faultanalysis' : faultanalysis,
+            'fingerprint': fingerprint,
+            'fp_event' : fp_event,
+            'fa_event' : fa_event,
+            'portname':portname,
             }
         return JsonResponse(data,status=200)
     
