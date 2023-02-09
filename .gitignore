@@ -3,3 +3,4 @@
 core/migrations/
 core/__pychache__
 graphs/.env
+db.sqlite3
