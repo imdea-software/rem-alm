@@ -29,8 +29,6 @@ def get_graphs_info(port,address,petition):
             else:
                 port_info.append(value)
 
-        # mirar a ver si hay 4 valores por index coger solo los dos ultimos
-
         for value in values:
             value = value.split(',')
             if len(value) == 3:
@@ -112,12 +110,8 @@ def parse_faultanalysis(info):
                 desviation = "No aplica"
                 port_info.append(f"Desviation: {desviation}")
             else:
-                port_info.append(data)
+                port_info.append(f"Desviation: {fl}")
             faultloss = float(data.split(':')[1])
-            """ print(type(faultloss), type(link_loss))
-            desviation = round(float(link_loss) - float(faultloss),3)
-            print(type(faultloss), type(link_loss))
-            port_info.append(f"Desviation: {desviation}(dB)") """
 
     return port_info
 
@@ -131,8 +125,8 @@ def parse_fingerprint(info):
             fingerprint_data.append(data)
         if data.split(':')[0] == 'Link Loss': 
            fingerprint_data.append(data)
-        if data.split(':')[0] == 'Fault Loss':
-            fingerprint_data.append(data)
+        """ if data.split(':')[0] == 'Fault Loss':
+            fingerprint_data.append(data) """
     return fingerprint_data
 
 def parse_events(info):
@@ -158,76 +152,6 @@ def parse_events(info):
     return fp_event, fa_event
 
 
-
-
-""" sep=  
-Type: FA 
-Trace Count: 2 
-Trace Time FP (UTC): 2020-01-29 16:07:12 
-Trace Time FA (UTC): 2021-10-29 05:36:32 
- 
-Device Info: 14 
-Release Number:               3.3.1 
-Shelf Unit Name:              64ALM/#1650D/AC 
-Shelf Name:                   CIEMAT-AL-AD-04 
-Inventory Type:               64ALM-1650D 
-CLEI Code:                    WOMSJ00BRA 
-Vendor ID:                    ADVA 
-Universal Serial Identifier:  LBADVA72183500308 
-Serial Number:                FA72183500308 
-Part Number:                  1043709846-01 
-FPGA Revision:                6.03.01 
-Firmware Revision:            2.56 
-Hardware Revision:            1.01 
-Software Revision:            30301_201912051528 
-Measurement Wavelength:       1650 
- 
-Link: 10 
-Port Name:        "UCM F1" 
-Link Length:      1014.8 
-External Offset:  5 
-Link Loss:        1.13 
-Fault Loss:       0.67 
-Coupler Loss:     0.70 
-Max Laser Power:  16.96 
-Link Latency:     5.0 
-Fault Position:     -1 
-Remark:           "" 
- 
-Events: 4 
-FP_EVENT_1: 0.0 >-53.8 2.2 "" 
-FP_EVENT_2: 1014.8 0.0 term "" 
-FA_EVENT_1: 0.0 >-53.7 1.7 
-FA_EVENT_2: 998.4 0.0 term 
- 
-Trace Settings: 12 
-Trace Name:         FP_1 FA_1 
-pulsewidth:         300 300 
-average:            16384 16384 
-sampling mode:      160 160 
-port:               5 5 
-start:              0.0 0.0 
-end:                3897.4 3897.4 
-length:             19999.5 19999.5 
-offset:             434.3 434.3 
-refractive index:   1.468900 1.468900 
-board temperature:  43.2 45.8 
-norm value:         657767509.476562 646414647.004390 
- 
-Trace Data: 2388 
-
-        #añadir Link Length
-        
-        #parse en dos tablas fault analysis & finger print
-Loss Fast Deviation High CLEAR	Deviation: 0.8 dB - Threshold: 1.0 dB
-            Timestamp:	2022-08-26 19:04:46
-            Link Loss [dB]:	23.7
-            Mean Fast/Medium/Slow [dB]:	22.9/23.8/23.5
-            Fault Position [m]: """
-
-        # add Fault Loss:       21.55 
-        # add Fault Position:     -1  (si es negativo poner: 'No aplica')
-        #desviation : link loss - fault loss
         
 
  
