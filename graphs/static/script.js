@@ -44,7 +44,6 @@ const selectElement = document.getElementById('address')
         var opt = document.createElement('option');
         opt.value = min;
         opt.innerHTML = ports_data[address][i][min];
-        console.log(opt)
         select.appendChild(opt);
         var instances = M.FormSelect.init(select, opt);
     }

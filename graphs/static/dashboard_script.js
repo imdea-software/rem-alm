@@ -1,117 +1,3 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block contentplaceholder %}
-
-<style>
-.collection{
-  /* width: 190px;
-  height: 254px; */
-  /* border-radius: 15px;
-  background: #e0e0e0;
-  box-shadow: 10px 10px 25px #bebebe,
-             -10px -10px 25px #ffffff; */
-  
-}
-.collection-item{
-  border: none !important;
-}
-#select-dropdown > li > span{
-  color: black !important
-}
-.btn{
-  background-color: #8c9eff !important;
-  /* background: linear-gradient(145deg, #5c6bc0, #cacaca); */
-  box-shadow:  20px 20px 60px #bebebe,
-             -20px -20px 60px #ffffff;
-}
-.valign-wrapper{
-  /* margin-right: 10% !important;
-  margin-left: 10% !important;
-  margin-top: 5% !important;
-  margin-right: 5% !important; */
-}
-</style>
-
-<div class="container">
-  <div class="row">
-    <div class="col"></div>
-  </div>
-  <div class="row">
-       <p class="col s6"> <span>   Elige un equipo para poder visualizar los puertos  <i class="material-icons teal-text darken-1">chat_bubble_outline</i> </span></p>  
-  </div>
-  <div class="section row">
-  <div class="col s6">
-        <form action="" id="portForm" name="portForm" method="POST">
-          {% csrf_token %}
-          <div class="row">
-            <div class="input-field col s6 white-text">
-              <select id="address" name="address" class="black-text">
-                <option selected class="black-text">Elige un equipo</option>
-                <option value="172.20.237.90">CIEMAT-AL-AD-04 (172.20.237.90)</option>
-                <option value="172.20.237.86">CSIC-AL-AD-03 (172.20.237.86)</option>
-              </select>
-              <label for="address">Equipo:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s6 white-text">
-              <select id="port" name="port">
-                  <option selected>Seleccionar el puerto</option> 
-              </select>
-              <label for="port">Puerto: </label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="input-field col s6 white-text">
-                <select class=""  id="type" name="type">
-                    <option value="af" selected>Automático</option>
-                    <option value="fa">Manual</option>
-                </select>
-                <label for="petition">Tipo: </label>
-                </div>
-              </div>
-              <div class="col s6">
-                  <button type="submit" class="btn waves-effect" id="applybutton">Aceptar</button>
-                </div>
-      </form>
-    </div>
-
-    <div class="col s6">
-      <p class=""><span class="left-align" name="portname" id="portname"> </span> </p>
-      <div class="row">
-            <div class="col" name="fault-analysis" id="fault-analysis"></div>
-            <div class="col right-align " id="finger-print" name="finger-print"></div>
-    </div>
-  </div>
-  </div>
-  <div class="divider"></div>
-</div>
-
-
-<div class="chart-section row">
-  <!-- <div class="col s12 m4 l2"></div> -->
-  <div id="chart" name="chart" class="col s12 m4 l8 valign-wrapper" ></div>  
-  <!-- <div class="col s12 m4 l2"></div> -->
-        </div>
-
-
-<div class="container">
-
-  <div class="section row">
-    <div class="col s6" id="fp-events" name="fp-events"></div>
-    <div class="col s6" id="fa-events" name="fa-events" ></div>
-
-</div>
-</div>
-
-
-
-{% endblock %}
-
-{% block jsbottom %}
-<script src="{% static 'script.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
 $(document).ready(function(){
     var ports_data = {
         "172.20.237.90":[
@@ -158,6 +44,7 @@ const selectElement = document.getElementById('address')
         var opt = document.createElement('option');
         opt.value = min;
         opt.innerHTML = ports_data[address][i][min];
+
         select.appendChild(opt);
         var instances = M.FormSelect.init(select, opt);
     }
@@ -200,6 +87,8 @@ function getCookie(name) {
         // estos métodos no requieren CSRF
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     };
+
+
  $("#portForm").on('submit', function(event){
       document.getElementById('applybutton').disabled=true; 
       /* document.getElementById('applybutton').innerHTML='Recibiendo información...'; */
@@ -242,7 +131,7 @@ function getCookie(name) {
                   type: "line",
                   stacked: false
                 },
-                colors: ["#424242","#8c9eff"],
+                colors: ["#424242","#00b8d4"],
                 series: [
                   {
                     name: "Finger Print",
@@ -318,17 +207,17 @@ function getCookie(name) {
                     },
                     axisBorder: {
                       show: true,
-                      color: "#8c9eff"
+                      color: "#00b8d4"
                     },
                     labels: {
                       style: {
-                        colors: "#8c9eff"
+                        colors: "#00b8d4"
                       }
                     },
                     title: {
                       text: "Fault analysis",
                       style: {
-                        color: "#8c9eff"
+                        color: "#00b8d4"
                       }
                     }
                   }
@@ -389,10 +278,10 @@ function getCookie(name) {
 function createFaultAnalysisTable(faultanalysis){
   var ul = document.createElement("ul");
   document.getElementById('fault-analysis').appendChild(ul);
-  ul.setAttribute( "class", "collection left-align");
+  ul.setAttribute( "class", "collection with-header left-align");
   var header = document.createElement("li");
-  header.className = "collection-item";
-  header.innerHTML = "<b> Fault Analysis Results </b>";
+  header.className = "collection-header";
+  header.innerHTML = "<p> Fault Analysis Results </p>";
   ul.appendChild(header);
   for (let i = 0; i < faultanalysis.length; i++){
         var li = document.createElement("li");  
@@ -409,10 +298,10 @@ function createFingerprintTable(fingerprint){
   document.getElementById('fa-events').innerHTML='';
   var ul = document.createElement("ul");
   document.getElementById('finger-print').appendChild(ul);
-  ul.setAttribute( "class", "collection left-align");
+  ul.setAttribute( "class", "collection with-header left-align");
   var header = document.createElement("li");
-  header.className = "collection-item";
-  header.innerHTML = "<b>Fingerprint Results </b>";
+  header.className = "collection-header";
+  header.innerHTML = "<p>Fingerprint Results </p>";
   ul.appendChild(header);
   for (let i = 0; i < fingerprint.length; i++){
         var li = document.createElement("li");
@@ -423,17 +312,18 @@ function createFingerprintTable(fingerprint){
 }
 
 function createEventsFPTable(fp_events){
+  /* console.log(fp_events); */
   var title = document.createElement("p");
-  title.setAttribute("class","right-align");
-  title.innerHTML = " <b> Fingerprint </b>";
+  title.setAttribute("class","left-align cyan-text darken-4");
+  title.innerHTML = "Fingerprint";
   document.getElementById('fp-events').appendChild(title);
   var fp_table = document.createElement("table");
-  fp_table.setAttribute("class", "responsive-table  striped right-align");
+  fp_table.setAttribute("class", "responsive-table  highlight left-align");
   document.getElementById('fp-events').appendChild(fp_table);
   var fp_header1 = document.createElement("thead");
   fp_table.append(fp_header1);
   var hrow = document.createElement("tr");
-  hrow.setAttribute("class", "right-align");
+  hrow.setAttribute("class", "left-align");
   fp_header1.append(hrow);
   var theader1 = document.createElement("th");
   theader1.innerHTML = "Position(m)";
@@ -462,12 +352,12 @@ function createEventsFPTable(fp_events){
 
 function createEventsFATable(fa_events){
   var title = document.createElement("p");
-  title.setAttribute("class","right-align");
-  title.innerHTML = "<b> Fault Analysis </b>";
+  title.setAttribute("class","right-align cyan-text darken-4");
+  title.innerHTML = "Fault Analysis";
   document.getElementById('fa-events').appendChild(title);
   /* document.getElementById('fa-events').setAttribute("class","right-align"); */
   var fa_table = document.createElement("table");
-  fa_table.setAttribute("class", "responsive-table striped left-align");
+  fa_table.setAttribute("class", "responsive-table highlight left-align");
   document.getElementById('fa-events').appendChild(fa_table);
   var fa_header1 = document.createElement("thead");
   fa_table.append(fa_header1);
@@ -497,8 +387,3 @@ function createEventsFATable(fa_events){
       tbody.append(trow);
     };
 };
-
-</script>
-
-{% endblock %}
-

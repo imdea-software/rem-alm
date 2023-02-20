@@ -31,33 +31,52 @@
   min-height: 200vh;
   flex-direction: column;
 }
-.btn{
-  background-color: #5c6bc0 !important;
-}
-/* .apexcharts-canvas{
-   padding-right: 20px !important;
-  margin-right: 20px!important;
-} 
-.apexcharts-canvas > *{
-  margin: 10%;
-  padding-right: 20px !important;
-  margin-right: 20px!important;
-  max-width: 760px;
-  margin: 35px auto;
-  opacity: 0.9;
-} */
-.chart{
-  opacity: 1;
-  border: 0;
-}
+/*  */
 main {
   flex: 1 0 auto;
+}
+/*  Small devices (landscape phones, 576px and up) */
+@media only screen and (min-width: 500px) and (max-width: 576px) { 
+  .valign-wrapper{
+    margin-right: 15%;
+  }
+}
+
+/*  Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .valign-wrapper{
+    margin-left: 5% !important;
+  }
+ }
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 768px) and(max-width: 992px) {
+  .valign-wrapper{
+    margin-left: 8% !important;
+    
+  }
+  }
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media screen and (min-width: 992px) and (max-width: 1500px) { 
+  .valign-wrapper{
+    margin-left: 10% !important;
+    
+  }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media screen and (min-width: 1500px) and (max-width: 2700px) { 
+  .valign-wrapper{
+    margin-left: 25% !important;
+    
+  }
 }
  </style>
 <header>
       <nav class="navbar-fixed z-depth-4">
         <div class="nav-wrapper indigo lighten-1">
-          <a href="{% url 'dashboard' %}" class="brand-logo left"><img src="{% static 'img/favicon.ico' %}" alt="">  Gráficos ALM</a>
+          <a href="{% url 'dashboard' %}" class="brand-logo left"><i class="material-icons" style="margin-left: 10px !important;">bug_report</i> Gráficos ALM</a>
           {% if user.is_authenticated %}
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{% url 'logout' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Cerrar sesión"">forward</i></a></li>
@@ -69,19 +88,17 @@ main {
         </div>
       </nav>
 </header>
-
-  
-    <main>
+<!-- MAIN  -->
+<main>
             {% block contentplaceholder %}{% endblock %}
-        </main>
-
+</main>
 <footer class="page-footer  grey darken-3 z-depth-3">
   <div class="container">
     <div class="row">
       <div class="col s6">
         <ul>
         <li><a href="index.html" target="_blank">
-          <img src="{% static 'img/logo_redimadrid_horizontal.png' %}" width="200" style="margin-bottom: 10px;" alt="REDIMadrid">
+          <img src="{% static 'logo_redimadrid_horizontal.png' %}" width="200" style="margin-bottom: 10px;" alt="REDIMadrid">
       </a></li>
       <li><a href="http://software.imdea.org/" target="_blank">
           <img src="{% static 'img/logoimdeablanco.png' %}" alt="IMDEA Software Institute">
@@ -117,6 +134,7 @@ main {
     <script src="{% static 'script.js' %}"></script>
     <script>
     $(document).ready(function(){
+      console.log('ancho de pantalla: '+ window.innerWidth)
       $('select').formSelect();
       var elems = document.querySelectorAll('.tooltipped');
       var instances = M.Tooltip.init(elems);
