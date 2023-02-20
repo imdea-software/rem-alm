@@ -1,5 +1,18 @@
 from graphs.settings import *
 from statistics import *
+from graphs import settings
+import os
+import logging
+
+
+# Set up logging system
+LOG_FILENAME = os.path.join(settings.LOG_FILE_LOCATION,'remalm_info.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(LOG_FILENAME)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def get_graphs_info(port,address,petition):
     import requests
@@ -8,7 +21,10 @@ def get_graphs_info(port,address,petition):
     import re
     
     url = (f"https://{address}/trace/{port}/{petition}/f")
-    r = requests.get(url=url, params={}, auth=(ZBX_USER,ZBX_PWD), verify=False)
+    try:        
+        r = requests.get(url=url, params={}, auth=(ZBX_USER,ZBX_PWD), verify=False)
+    except Exception as e:
+        logger.info(f"There was an error when trying to connect to the ALM API. Error: {e}")
     if not r.text == 'Not Found':
         soup = bs(r.text, "lxml")
         text = soup.p.text.replace('\n',',')
@@ -28,7 +44,6 @@ def get_graphs_info(port,address,petition):
                 values.append(value)
             else:
                 port_info.append(value)
-
         for value in values:
             value = value.split(',')
             if len(value) == 3:
@@ -56,7 +71,9 @@ def get_graphs_info(port,address,petition):
             faultanalysis = parse_faultanalysis(port_info)
             fingerprint = parse_fingerprint(port_info)
             fp_event, fa_event = parse_events(port_info)
-            portname = port_info[23]
+            pn = port_info[23].split(":")[1].strip(" ")
+            pns = pn.strip('"')
+            portname = (f"Puerto: {pns}")
         else:
             faultanalysis, fingerprint, fp_event, fa_event,  portname = False
 
@@ -88,6 +105,8 @@ def get_graphs_info(port,address,petition):
         return None, None, None, faultanalysis, fingerprint, fp_event, fa_event
 
 def parse_faultanalysis(info):
+    from datetime import datetime
+    
     events = []
     port_info = []
     link_loss = ''
@@ -95,7 +114,9 @@ def parse_faultanalysis(info):
     faultloss = ''
     for data in info:
         if data.split('):')[0] == 'Trace Time FA (UTC':
-            port_info.append(data.split('):')[1])
+            d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
+            date = d.strftime("%H:%M %d-%m-%Y")
+            port_info.append(date)
         if data.split(':')[0] == 'Coupler Loss':
             link_loss = float(data.split(':')[1])
         if data.split(':')[0] == 'Fault Position':
@@ -117,10 +138,14 @@ def parse_faultanalysis(info):
 
 
 def parse_fingerprint(info):
+    from datetime import datetime
+
     fingerprint_data = []
     for data in info:
         if data.split('):')[0] == 'Trace Time FP (UTC':
-            fingerprint_data.append(data.split('):')[1])
+            d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
+            date = d.strftime("%H:%M %d-%m-%Y")
+            fingerprint_data.append(date)
         if data.split(':')[0] == 'Link Length':
             fingerprint_data.append(data)
         if data.split(':')[0] == 'Link Loss': 

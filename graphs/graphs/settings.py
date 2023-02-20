@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from decouple import config
 from pathlib import Path
 import os
+import mimetypes
+
+mimetypes.add_type("text/javascript", ".js", True)
 
 
 
@@ -32,6 +35,67 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# LOGGING 
+LOG_FILE_LOCATION = '/var/log/remalm/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'errors_file': {
+            'level':'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/remalm/remalm_error.log',
+            'formatter': 'verbose',
+        },
+        'warning_file': {
+            'level':'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/remalm/remalm_warning.log',
+            'formatter': 'verbose',
+        },
+        'info_file': {
+            'level':'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/remalm/remalm_info.log',
+            'formatter': 'simple',
+        },
+        
+    }, 
+     'loggers': {
+        'error_loger': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'warning_logger':{
+            'handlers':['warning_file'],
+            'level':'WARNING',
+            'propagate':True,
+        },
+        'info_logger':{
+            'handlers':['info_file'],
+            'level':'INFO',
+            'propagate':True,
+        },
+        'django.request':{
+            'handlers':['errors_file'],
+            'level':'ERROR',
+            'propagate':True,
+        }
+    }
+}
 
 
 ALLOWED_HOSTS = ['localhost','rem-alm.redimadrid.es','127.0.0.1','10.10.4.172']
@@ -147,9 +211,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-# STATIC_URL = 'static/'
-STATIC_URL = "https://remedios.redimadrid.es/static/"
-STATIC_ROOT = os.path.join(BASE_DIR,'/static/')
+STATICFILES_DIRS = (
+  os.path.join(BASE_DIR, 'static'),
+)
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
 
 
 # Default primary key field type
@@ -173,3 +242,9 @@ LDAP_AUTH_SEARCH_BASE = config('LDAP_SEARCH_BASE')
 LDAP_ALWAYS_SEARCH_BIND = True
 
 AUTH_LDAP_START_TLS = True
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
