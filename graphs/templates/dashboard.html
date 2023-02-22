@@ -66,6 +66,7 @@
                 <select class=""  id="type" name="type">
                     <option value="af" selected>Automático</option>
                     <option value="fa">Manual</option>
+                    <option value="man">Generar nuevo fault-analysis</option>
                 </select>
                 <label for="petition">Tipo: </label>
                 </div>
@@ -102,6 +103,7 @@
     <div class="col s6" id="fa-events" name="fa-events" ></div>
 
 </div>
+
 </div>
 
 
@@ -225,7 +227,11 @@ function getCookie(name) {
       },
       type : "POST",
       dataType:"json",
-      success: function(response){  
+      success: function(response){ 
+        if(response['message']){
+          document.getElementById('chart').innerHTML=response['message'];
+          document.getElementById('applybutton').disabled=false;
+        }else{
           if(response['keys'] && response['value1'] && response['value2']){
             var keys = response['keys'];
             var value1 = response['value1'];
@@ -370,7 +376,8 @@ function getCookie(name) {
             $('#applybutton').removeAttr('disabled');
           }  
           }
-        },
+        }
+      },
         error: function(){
           document.getElementById('fault-analysis').innerHTML='';
             document.getElementById('finger-print').innerHTML='';
@@ -424,8 +431,8 @@ function createFingerprintTable(fingerprint){
 
 function createEventsFPTable(fp_events){
   var title = document.createElement("p");
-  title.setAttribute("class","right-align");
-  title.innerHTML = " <b> Fingerprint </b>";
+  title.setAttribute("class","left-align");
+  title.innerHTML = " <h6> FINGERPRINT </h6>";
   document.getElementById('fp-events').appendChild(title);
   var fp_table = document.createElement("table");
   fp_table.setAttribute("class", "responsive-table  striped right-align");
@@ -463,7 +470,7 @@ function createEventsFPTable(fp_events){
 function createEventsFATable(fa_events){
   var title = document.createElement("p");
   title.setAttribute("class","right-align");
-  title.innerHTML = "<b> Fault Analysis </b>";
+  title.innerHTML = "<h6> FAULT ANALYSIS </h6>";
   document.getElementById('fa-events').appendChild(title);
   /* document.getElementById('fa-events').setAttribute("class","right-align"); */
   var fa_table = document.createElement("table");

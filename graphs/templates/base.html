@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{% static 'style.css' %}"> -->
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <!--Import materialize.css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -30,6 +30,7 @@
   display: flex;
   min-height: 200vh;
   flex-direction: column;
+  font-family: 'Montserrat' !important;
 }
 /*  */
 main {
@@ -134,7 +135,6 @@ main {
     <script src="{% static 'script.js' %}"></script>
     <script>
     $(document).ready(function(){
-      console.log('ancho de pantalla: '+ window.innerWidth)
       $('select').formSelect();
       var elems = document.querySelectorAll('.tooltipped');
       var instances = M.Tooltip.init(elems);

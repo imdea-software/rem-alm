@@ -18,8 +18,8 @@ def get_graphs_info(port,address,petition):
     import requests
     import pandas as pd
     from bs4 import BeautifulSoup as bs
-    import re
-    
+    import re 
+
     url = (f"https://{address}/trace/{port}/{petition}/f")
     try:        
         r = requests.get(url=url, params={}, auth=(ZBX_USER,ZBX_PWD), verify=False)
@@ -105,7 +105,7 @@ def get_graphs_info(port,address,petition):
         return None, None, None, faultanalysis, fingerprint, fp_event, fa_event
 
 def parse_faultanalysis(info):
-    from datetime import datetime
+    from datetime import datetime, timedelta
     
     events = []
     port_info = []
@@ -115,7 +115,10 @@ def parse_faultanalysis(info):
     for data in info:
         if data.split('):')[0] == 'Trace Time FA (UTC':
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
-            date = d.strftime("%H:%M %d-%m-%Y")
+            print(d, type(d))
+            d1 = d + timedelta(hours=1)
+            print(d1, type(d1))
+            date = d1.strftime("%H:%M %d-%m-%Y")
             port_info.append(date)
         if data.split(':')[0] == 'Coupler Loss':
             link_loss = float(data.split(':')[1])
@@ -138,20 +141,19 @@ def parse_faultanalysis(info):
 
 
 def parse_fingerprint(info):
-    from datetime import datetime
+    from datetime import datetime, timedelta
 
     fingerprint_data = []
     for data in info:
         if data.split('):')[0] == 'Trace Time FP (UTC':
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
-            date = d.strftime("%H:%M %d-%m-%Y")
+            d1 = d + timedelta(hours=1)
+            date = d1.strftime("%H:%M %d-%m-%Y")
             fingerprint_data.append(date)
         if data.split(':')[0] == 'Link Length':
             fingerprint_data.append(data)
         if data.split(':')[0] == 'Link Loss': 
            fingerprint_data.append(data)
-        """ if data.split(':')[0] == 'Fault Loss':
-            fingerprint_data.append(data) """
     return fingerprint_data
 
 def parse_events(info):
