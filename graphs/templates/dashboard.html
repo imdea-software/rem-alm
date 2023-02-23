@@ -66,7 +66,7 @@
                 <select class=""  id="type" name="type">
                     <option value="af" selected>Automático</option>
                     <option value="fa">Manual</option>
-                    <option value="man">Generar nuevo fault-analysis</option>
+                    <option value="man">Comenzar Fault Analysis</option>
                 </select>
                 <label for="petition">Tipo: </label>
                 </div>
@@ -117,31 +117,31 @@
 $(document).ready(function(){
     var ports_data = {
         "172.20.237.90":[
-            {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1"},
-            {"2" : "CIEMAT-URJC-IMDEA NETWORK - F2"},
-            {"3" : "Imdea Software F1"},
-            {"4" : "Imdea Software F2"},
-            {"5" : "UCM F1"},
-            {"6" : "UCM F2"},
-            {"7" : "CIB F1"},
-            {"8" : "CIB F2"},
-            {"9" : "UNED F1"},
-            {"10" : "UNED F2"},
-            {"11" : "Casa Velázquez F1"},
-            {"12" : "Casa Velázquez F2"},
-            {"13" : "UPM F1"},
-            {"14" : "UPM F2"},
-            {"15" : "UAM F1"},
-            {"16" : "UAM F2"}
+            {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1 - (1)"},
+            {"2" : "CIEMAT-URJC-IMDEA NETWORK - F2 - (2)"},
+            {"3" : "Imdea Software F1 - (3)"},
+            {"4" : "Imdea Software F2 - (4)"},
+            {"5" : "UCM F1 - (5)"},
+            {"6" : "UCM F2 - (6)"},
+            {"7" : "CIB F1 - (7)"},
+            {"8" : "CIB F2 - (8)"},
+            {"9" : "UNED F1 - (9)"},
+            {"10" : "UNED F2 - (10)"},
+            {"11" : "Casa Velázquez F1 - (11)"},
+            {"12" : "Casa Velázquez F2 - (12)"},
+            {"13" : "UPM F1 - (13)"},
+            {"14" : "UPM F2 - (14)"},
+            {"15" : "UAM F1 - (15)"},
+            {"16" : "UAM F2 - (16)"}
                        
     ],
         "172.20.237.86":[
-            {"1" : "CSIC - UC3M - IMDEA NETWORK - F1"},
-            {"2" : "CSIC - UC3M - IMDEA NETWORK - F2"},
-            {"3" : "CSICJO F1"},
-            {"4" : "CSICJO F2"},
-            {"5" : "UCM F1"},
-            {"6" : "UCM F2"}
+            {"1" : "CSIC - UC3M - IMDEA NETWORK - F1 - (1)"},
+            {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
+            {"3" : "CSICJO F1 - (3)"},
+            {"4" : "CSICJO F2 - (4)"},
+            {"5" : "UCM F1 - (5)"},
+            {"6" : "UCM F2 - (6)"}
     ]  
     }
 
@@ -229,8 +229,14 @@ function getCookie(name) {
       dataType:"json",
       success: function(response){ 
         if(response['message']){
-          document.getElementById('chart').innerHTML=response['message'];
-          document.getElementById('applybutton').disabled=false;
+            document.getElementById('chart').innerHTML=response['message'];
+            document.getElementById('fault-analysis').innerHTML='';
+            document.getElementById('finger-print').innerHTML='';
+            document.getElementById('fp-events').innerHTML='';
+            document.getElementById('fa-events').innerHTML='';
+            document.getElementById('chart').innerHTML='';
+            document.getElementById('portname').innerHTML='';
+            document.getElementById('applybutton').disabled=false;
         }else{
           if(response['keys'] && response['value1'] && response['value2']){
             var keys = response['keys'];

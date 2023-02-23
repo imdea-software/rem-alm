@@ -3,6 +3,8 @@ from statistics import *
 from graphs import settings
 import os
 import logging
+from pysnmp import hlapi
+from pysnmp.hlapi import *
 
 
 # Set up logging system
@@ -104,6 +106,36 @@ def get_graphs_info(port,address,petition):
         
         return None, None, None, faultanalysis, fingerprint, fp_event, fa_event
 
+
+
+def snmp_manual_petition(port, address, typeof):
+    
+    
+    # Set up SNMP parameters
+    snmp_version = 1
+    snmp_community = 'RTCM'
+    snmp_ip = address
+    snmp_oid = (f"1.3.6.1.4.1.2544.1.14.6.1.1.1.{port}.4")
+    snmp_value = 'new_value'
+
+    # Perform SNMP SET request
+    print(type(snmp_version), type(snmp_community), snmp_oid)
+    try:
+        errorIndication, errorStatus, errorIndex, varBinds = next(setCmd(SnmpEngine(), CommunityData(snmp_community, mpModel=snmp_version),UdpTransportTarget((snmp_ip, 161)),ContextData(),ObjectType(ObjectIdentity(snmp_oid))))
+        if errorIndication:
+            logger.info(f"SNMP SET request failed: {errorIndication}")
+        else:
+            for varBind in varBinds:
+                print(f"{varBind.prettyPrint()}")
+                message = 'Se ha ejecutado su peticion, porfavor espere unos minutos antes de solicitar ver el analisis manual.'
+                return message
+    except Exception as e:
+        logger.info('There was an error when trying to create a manual fault analysis. Error: ',e)
+        message = 'Ha habido un error cuando se pedia un nuevo Fault Analysis, porfavor contacte con el administrador.'
+        return message
+
+
+
 def parse_faultanalysis(info):
     from datetime import datetime, timedelta
     
@@ -115,9 +147,7 @@ def parse_faultanalysis(info):
     for data in info:
         if data.split('):')[0] == 'Trace Time FA (UTC':
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
-            print(d, type(d))
             d1 = d + timedelta(hours=1)
-            print(d1, type(d1))
             date = d1.strftime("%H:%M %d-%m-%Y")
             port_info.append(date)
         if data.split(':')[0] == 'Coupler Loss':
