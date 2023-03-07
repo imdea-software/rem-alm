@@ -1,0 +1,40 @@
+{% extends '../base.html' %}
+{% block contentplaceholder %}
+       <div class="container">
+       <div class="row">
+                <div class="col">
+                    <h5 class=""><i class="material-icons">person</i>  Activar Perfil de Usuario</h5>
+					<p> Solo se puede asociar un usuario a una instituciones por cuestiones de seguridad. El único usuario que pertenezca a más de una institución debería de ser el superusuario.</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+            <div class="row mt-2">
+                        <!-- /.panel-heading -->
+						<form method="POST" class="g-3 align-items-center" action="{% url 'activate-user' %}">
+							{% csrf_token %}
+							<div class="row">
+							<label class="col col-2 control-label" for="#"><b>Users:</b></label>
+                        </div>	
+		            				{% for user in users %}
+                                    <div class="row">        
+                                        <div class="col col-8">
+                                            <label>
+                                                <input type="checkbox" id="id_user" value="{{user}}" name="user">
+                                                <span>{{user.username}}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+		           					{% endfor %}
+							<div class="form-group">
+				 	<div class="row"></div>
+				 	 	<div class="col col-8">
+							<button type="submit" id="applybutton" value="Apply" class="btn waves-effect indigo">Activate</button>
+						</div>
+					</div>
+				</form>
+    	</div>
+	</div>
+</div>
+
+	{% endblock %}

@@ -70,8 +70,14 @@ def get_graphs_info(port,address,petition):
         ma_v2 =[]
         s = 0
         if not port_info[0] == 'Not Found':
-            faultanalysis = parse_faultanalysis(port_info)
-            fingerprint = parse_fingerprint(port_info)
+            faultanalysis, fa_linkloss = parse_faultanalysis(port_info)
+            fingerprint, fp_linkloss = parse_fingerprint(port_info)
+            if fa_linkloss > 40: 
+                desviation = "No aplica"
+                faultanalysis.append(f"Desviation: {desviation}")
+            else:
+                fl = round(float(fa_linkloss) - float(fp_linkloss), 3)
+                faultanalysis.append(f"Desviation: {fl}")
             fp_event, fa_event = parse_events(port_info)
             pn = port_info[23].split(":")[1].strip(" ")
             pns = pn.strip('"')
@@ -115,18 +121,17 @@ def snmp_manual_petition(port, address, typeof):
     snmp_version = 1
     snmp_community = 'RTCM'
     snmp_ip = address
-    snmp_oid = (f"1.3.6.1.4.1.2544.1.14.6.1.1.1.{port}.4")
+    snmp_oid = (f"1.3.6.1.4.1.2544.1.14.6.1.1.1.{port}")
     snmp_value = 'new_value'
 
+# buscar como a;adir el tipo snmpset -v 2c -c RTCM 172.20.237.90 .1.3.6.1.4.1.2544.1.14.6.1.1.1.11 i 4 (param i)
     # Perform SNMP SET request
-    print(type(snmp_version), type(snmp_community), snmp_oid)
     try:
-        errorIndication, errorStatus, errorIndex, varBinds = next(setCmd(SnmpEngine(), CommunityData(snmp_community, mpModel=snmp_version),UdpTransportTarget((snmp_ip, 161)),ContextData(),ObjectType(ObjectIdentity(snmp_oid))))
+        errorIndication, errorStatus, errorIndex, varBinds = next(setCmd(SnmpEngine(), CommunityData(snmp_community, mpModel=snmp_version),UdpTransportTarget((snmp_ip, 161)),ContextData(),ObjectType(ObjectIdentity(snmp_oid), Integer(4))))
         if errorIndication:
             logger.info(f"SNMP SET request failed: {errorIndication}")
         else:
             for varBind in varBinds:
-                print(f"{varBind.prettyPrint()}")
                 message = 'Se ha ejecutado su peticion, porfavor espere unos minutos antes de solicitar ver el analisis manual.'
                 return message
     except Exception as e:
@@ -149,25 +154,16 @@ def parse_faultanalysis(info):
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
             d1 = d + timedelta(hours=1)
             date = d1.strftime("%H:%M %d-%m-%Y")
-            port_info.append(date)
-        if data.split(':')[0] == 'Coupler Loss':
-            link_loss = float(data.split(':')[1])
+            port_info.append(f"Timestamp: {date}")
         if data.split(':')[0] == 'Fault Position':
             if data.split(':')[1] == "     -1 ":
                 port_info.append("Fault Position: No aplica")
             else:
                 port_info.append(data) 
         if data.split(':')[0] == 'Fault Loss':
-            fl = float(data.split(':')[1].replace(" ",""))
-            if fl > 40: 
-                port_info.append("Fault Loss: broken")
-                desviation = "No aplica"
-                port_info.append(f"Desviation: {desviation}")
-            else:
-                port_info.append(f"Desviation: {fl}")
-            faultloss = float(data.split(':')[1])
-
-    return port_info
+            port_info.append(data)
+            link_loss = float(data.split(':')[1])
+    return port_info, link_loss
 
 
 def parse_fingerprint(info):
@@ -179,12 +175,15 @@ def parse_fingerprint(info):
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
             d1 = d + timedelta(hours=1)
             date = d1.strftime("%H:%M %d-%m-%Y")
-            fingerprint_data.append(date)
+            fingerprint_data.append(f"Timestamp: {date}")
+        if data.split(':')[0] == 'Link Loss': 
+            fingerprint_data.append(data)
+            link_loss = data.split(':')[1]
+        if data.split(':')[0] == 'External Offset':
+            fingerprint_data.append(f"Offset: {data.split(':')[1]}")
         if data.split(':')[0] == 'Link Length':
             fingerprint_data.append(data)
-        if data.split(':')[0] == 'Link Loss': 
-           fingerprint_data.append(data)
-    return fingerprint_data
+    return fingerprint_data, link_loss
 
 def parse_events(info):
     fp_event = []

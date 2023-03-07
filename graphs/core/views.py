@@ -6,7 +6,7 @@ from .helpers import *
 import os
 from graphs import settings
 import logging
-
+from .decorators import *
 
 # Set up logging system
 LOG_FILENAME = os.path.join(settings.LOG_FILE_LOCATION,'remalm_info.log')
@@ -20,11 +20,21 @@ logger.addHandler(handler)
 
 # Create your views here.
 @login_required
+@verify_user_profile
 def dashboard(request):
-    return render(request,'dashboard.html')
+    member = request.user.profile
+    devices = member.get_view()
+    data = {
+        'devices': devices[0],
+        'fa' : devices[1],
+        'vista': member.view
+    }
+
+    return render(request,'dashboard.html', data)
 
 
 @login_required
+@verify_user_profile
 def ajax_alm_graph(request):
     if request.method == 'POST':
         data = {}
@@ -43,6 +53,7 @@ def ajax_alm_graph(request):
                 data = {'message': message}
                 return JsonResponse(data,status=200)
         else:
+            
             try:
                 value1, value2, keys, faultanalysis, fingerprint, fp_event, fa_event, portname = get_graphs_info(port,address,typeof)
                 ##parsear hora para que devuelva la actual

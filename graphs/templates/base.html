@@ -30,7 +30,7 @@
   display: flex;
   min-height: 200vh;
   flex-direction: column;
-  font-family: 'Montserrat' !important;
+  /* font-family: 'Montserrat' !important; */
 }
 /*  */
 main {
@@ -80,7 +80,12 @@ main {
           <a href="{% url 'dashboard' %}" class="brand-logo left"><i class="material-icons" style="margin-left: 10px !important;">bug_report</i> Gráficos ALM</a>
           {% if user.is_authenticated %}
           <ul id="nav-mobile" class="right hide-on-med-and-down">
+            {% if user.is_superuser %}
+            <li><a href="{% url 'admin:index' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Admin panel">apps</i></a></li>
+            <li><a href="{% url 'activate-user' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Activar usuario">person</i></a></li>
+            {% endif %}
             <li><a href="{% url 'logout' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Cerrar sesión"">forward</i></a></li>
+            
             <!-- <li><a href="{% url 'dashboard' %}">Gráficos ALM</a></li> -->
           </ul>
           {% else %}

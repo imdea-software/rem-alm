@@ -33,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # LOGGING 
 LOG_FILE_LOCATION = '/var/log/remalm/'
@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -211,11 +212,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static'),
-)
-
 STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/almgraphs/graphs/static'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
