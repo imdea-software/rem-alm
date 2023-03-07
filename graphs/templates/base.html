@@ -82,7 +82,7 @@ main {
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {% if user.is_superuser %}
             <li><a href="{% url 'admin:index' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Admin panel">apps</i></a></li>
-            <li><a href="{% url 'activate-user' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Activar usuario">person</i></a></li>
+            <!-- <li><a href="{% url 'activate-user' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Activar usuario">person</i></a></li> -->
             {% endif %}
             <li><a href="{% url 'logout' %}" class=""><i class="material-icons tooltipped" data-position="left" data-tooltip="Cerrar sesión"">forward</i></a></li>
             
