@@ -16,85 +16,6 @@ body {
   width: 80rem;
 }
 
-/* Small devices (landscape phones, less than 768px) */
-@media screen and (min-width: 767.98px) {
-    body {
-        margin: calc(var(--header-height) + 1rem) 0 0 0;
-        padding-left: calc(var(--nav-width) + 2rem)
-    }
-
-    
-    .navbar {
-        left: 0;
-        padding: 1rem 1rem 0 0
-    }
-
-    .body{
-        padding-left: calc(var(--nav-width) + 188px)
-    }
-}
-
-/* Medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) {  body {
-  margin: calc(var(--header-height) + 1rem) 0 0 0;
-  padding-left: calc(var(--nav-width) + 2rem)
-}
-
-.header {
-  height: calc(var(--header-height) + 1rem);
-  padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
-}
-.navbar {
-  left: 0;
-  padding: 1rem 1rem 0 0
-}
-
-.body{
-  padding-left: calc(var(--nav-width) + 188px)
-}
- }
-
-/* Large devices (desktops, less than 1200px) */
-@media (max-width: 1199.98px) {  body {
-  margin: calc(var(--header-height) + 1rem) 0 0 0;
-  padding-left: calc(var(--nav-width) + 2rem)
-}
-
-.header {
-  height: calc(var(--header-height) + 1rem);
-  padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
-}
-.navbar {
-  left: 0;
-  padding: 1rem 1rem 0 0
-}
-
-
-.body {
-  padding-left: calc(var(--nav-width) + 188px)
-}
- }
-
-/* X-Large devices (large desktops, less than 1400px) */
-@media (max-width: 1399.98px) {  body {
-  margin: calc(var(--header-height) + 1rem) 0 0 0;
-  padding-left: calc(var(--nav-width) + 2rem)
-}
-
-.header {
-  height: calc(var(--header-height) + 1rem);
-  padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
-}
-.navbar {
-  left: 0;
-  padding: 1rem 1rem 0 0
-}
-
-.body {
-  padding-left: calc(var(--nav-width) + 188px)
-}
- }
-
  #select-dropdown > li > span{
   color: black !important
 }
@@ -113,4 +34,130 @@ body {
 }
 #man > li{
   color: black !important;
+}body {
+  display: flex;
+  min-height: 200vh;
+  flex-direction: column;
+  /* font-family: 'Montserrat' !important; */
+}
+/*  */
+main {
+  flex: 1 0 auto;
+}
+
+
+#select-dropdown > li > span{
+  color: black !important
+}
+.apexcharts-canvas{
+  margin-right:10% !important;
+}
+
+
+/*  Small devices (landscape phones, 576px and up) */
+@media only screen and (min-width: 500px) and (max-width: 576px) { 
+  .valign-wrapper{
+    margin-right: 5% !important;
+  }
+}
+
+/*  Medium devices (tablets, 768px and up) */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .valign-wrapper{
+    margin-left: 5% !important;
+  }
+ 
+ body {
+  margin: calc(var(--header-height) + 1rem) 0 0 0;
+  padding-left: calc(var(--nav-width) + 2rem)
+}
+
+
+.navbar {
+  left: 0;
+  padding: 1rem 1rem 0 0
+}
+
+.body{
+  padding-left: calc(var(--nav-width) + 188px)
+}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media screen and (min-width: 768px) and(max-width: 992px) {
+  .valign-wrapper{
+    margin-left: 8% !important;
+    
+  }
+  body {
+    margin: calc(var(--header-height) + 1rem) 0 0 0;
+    padding-left: calc(var(--nav-width) + 2rem)
+  }
+  
+  .header {
+    height: calc(var(--header-height) + 1rem);
+    padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+  }
+  .navbar {
+    left: 0;
+    padding: 1rem 1rem 0 0
+  }
+  
+  .body{
+    padding-left: calc(var(--nav-width) + 188px)
+  }
+   }
+
+  
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media screen and (min-width: 992px) and (max-width: 1500px) { 
+  .valign-wrapper{
+    margin-left: 10% !important;
+    
+  }
+  body {
+    margin: calc(var(--header-height) + 1rem) 0 0 0;
+    padding-left: calc(var(--nav-width) + 2rem)
+  }
+  
+  .header {
+    height: calc(var(--header-height) + 1rem);
+    padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+  }
+  .navbar {
+    left: 0;
+    padding: 1rem 1rem 0 0
+  }
+  
+  
+  .body {
+    padding-left: calc(var(--nav-width) + 188px)
+  }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media screen and (min-width: 1500px) and (max-width: 2700px) { 
+  .valign-wrapper{
+    margin-left: 15% !important;
+  }
+  body {
+    margin: calc(var(--header-height) + 1rem) 0 0 0;
+    padding-left: calc(var(--nav-width) + 2rem)
+  }
+  
+  .header {
+    height: calc(var(--header-height) + 1rem);
+    padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
+  }
+  .navbar {
+    left: 0;
+    padding: 1rem 1rem 0 0
+  }
+  
+  .body {
+    padding-left: calc(var(--nav-width) + 188px)
+  }
+
+
 }
