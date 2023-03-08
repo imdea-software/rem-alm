@@ -160,6 +160,7 @@ def parse_faultanalysis(info):
                 port_info.append("Fault Position: No aplica")
             else:
                 port_info.append(data) 
+    for data in info:
         if data.split(':')[0] == 'Fault Loss':
             port_info.append(data)
             link_loss = float(data.split(':')[1])
@@ -179,8 +180,6 @@ def parse_fingerprint(info):
         if data.split(':')[0] == 'Link Loss': 
             fingerprint_data.append(data)
             link_loss = data.split(':')[1]
-        if data.split(':')[0] == 'External Offset':
-            fingerprint_data.append(f"Offset: {data.split(':')[1]}")
         if data.split(':')[0] == 'Link Length':
             fingerprint_data.append(data)
     return fingerprint_data, link_loss

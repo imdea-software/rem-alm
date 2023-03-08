@@ -112,7 +112,7 @@
 <script src="{% static 'script.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-$(document).ready(function(){
+/* $(document).ready(function(){
     var port_data = {
         "172.20.237.90":[
             {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1 - (1)"},
@@ -214,42 +214,9 @@ $(document).ready(function(){
 })
 
   });
+ */
 
 
-function sameOrigin(url) {
-    // test that a given url is a same-origin URL
-    // url could be relative or scheme relative or absolute
-    var host = document.location.host; // host + port
-    var protocol = document.location.protocol;
-    var sr_origin = '//' + host;
-    var origin = protocol + sr_origin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-        // or any other URL that isn't scheme relative or absolute i.e relative.
-        !(/^(\/\/|http:|https:).*/.test(url));
-};
-
-// usando jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-};
-  function csrfSafeMethod(method) {
-        // estos métodos no requieren CSRF
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    };
  $("#portForm").on('submit', function(event){
       document.getElementById('applybutton').disabled=true; 
       /* document.getElementById('applybutton').innerHTML='Recibiendo información...'; */
@@ -266,16 +233,19 @@ function getCookie(name) {
       }
 }
   });
-  $.ajax({
-      url : url,
-      data : {
+  var info = {
         "port": port,
         "address":address,
         "type" : type
-      },
-      type : "POST",
+      };
+  console.log(typeof(info)+ 'json strigfy : ' + JSON.stringify(info) + 'var normal : '+ info)
+  $.ajax({
+      url : url,
+      data : info,
+      method : "POST",
       dataType:"json",
       success: function(response){ 
+        console.log('its a success'+response);
         if(response['message']){
             document.getElementById('fault-analysis').innerHTML='';
             document.getElementById('finger-print').innerHTML='';
@@ -432,14 +402,16 @@ function getCookie(name) {
           }
         }
       },
-        error: function(){
+        error: function(response){
+          console.log('here')
+          console.log('error' + response)
           document.getElementById('fault-analysis').innerHTML='';
             document.getElementById('finger-print').innerHTML='';
             document.getElementById('fp-events').innerHTML='';
             document.getElementById('fa-events').innerHTML='';
             document.getElementById('chart').innerHTML='';
           document.getElementById('portname').innerHTML='';
-          document.getElementById('chart').innerHTML="Ahora mismo no hay información disponible sobre esta gráfica...";
+          /* document.getElementById('chart').innerHTML="Ahora mismo no hay información disponible sobre esta gráfica..."; */
           document.getElementById('applybutton').disabled=false;
             }
           });
