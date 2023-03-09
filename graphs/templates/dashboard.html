@@ -96,7 +96,9 @@
 <script src="{% static 'script.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-
+$(document).ready(function(){
+  console.log('window width: '+window.innerWidth)
+});
 
  $("#portForm").on('submit', function(event){
       document.getElementById('applybutton').disabled=true; 
