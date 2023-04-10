@@ -23,11 +23,13 @@ def get_graphs_info(port,address,petition):
     import re 
 
     url = (f"https://{address}/trace/{port}/{petition}/f")
-    try:        
+    try:
+        # make petition for zabbix graph
         r = requests.get(url=url, params={}, auth=(ZBX_USER,ZBX_PWD), verify=False)
     except Exception as e:
         logger.info(f"There was an error when trying to connect to the ALM API. Error: {e}")
     if not r.text == 'Not Found':
+        # discard all the unnecesary data from the json response
         soup = bs(r.text, "lxml")
         text = soup.p.text.replace('\n',',')
         text = text.replace('\t',' ')
@@ -38,6 +40,7 @@ def get_graphs_info(port,address,petition):
         graph_values = {}
         discard_values = {}
         port_info = []
+        # search all the values for the graph, append it to the dictionary we will send to the view
         for value in text:
             result = re.match(pattern,value)
             if result:
@@ -69,7 +72,9 @@ def get_graphs_info(port,address,petition):
         ma_v1 = []
         ma_v2 =[]
         s = 0
+        # find all the information for building the tables
         if not port_info[0] == 'Not Found':
+            # calling the helpers that will give us the direct data for the fault analysis and finger print 
             faultanalysis, fa_linkloss = parse_faultanalysis(port_info)
             fingerprint, fp_linkloss = parse_fingerprint(port_info)
             if fa_linkloss > 40: 
@@ -115,17 +120,13 @@ def get_graphs_info(port,address,petition):
 
 
 def snmp_manual_petition(port, address, typeof):
-    
-    
     # Set up SNMP parameters
     snmp_version = 1
     snmp_community = 'RTCM'
     snmp_ip = address
     snmp_oid = (f"1.3.6.1.4.1.2544.1.14.6.1.1.1.{port}")
     snmp_value = 'new_value'
-
-# buscar como a;adir el tipo snmpset -v 2c -c RTCM 172.20.237.90 .1.3.6.1.4.1.2544.1.14.6.1.1.1.11 i 4 (param i)
-    # Perform SNMP SET request
+    # make petition for manual fault analysis
     try:
         errorIndication, errorStatus, errorIndex, varBinds = next(setCmd(SnmpEngine(), CommunityData(snmp_community, mpModel=snmp_version),UdpTransportTarget((snmp_ip, 161)),ContextData(),ObjectType(ObjectIdentity(snmp_oid), Integer(4))))
         if errorIndication:
@@ -149,6 +150,7 @@ def parse_faultanalysis(info):
     link_loss = ''
     desviation = ''
     faultloss = ''
+    
     for data in info:
         if data.split('):')[0] == 'Trace Time FA (UTC':
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")

@@ -69,7 +69,7 @@ class Profile(models.Model):
                     {"4" : "CSICJO F2 - (4)"},
             ]  
             }
-            fa = False
+            fa = True
             return devices, fa
         
         if self.view == 'correos':

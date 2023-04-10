@@ -36,6 +36,8 @@ def dashboard(request):
 @login_required
 @verify_user_profile
 def ajax_alm_graph(request):
+    # receive data from the view and send it to the server in order to the the graphs information 
+    # and also the manaual fault analysis if requested
     if request.method == 'POST':
         data = {}
         port = request.POST.get('port')

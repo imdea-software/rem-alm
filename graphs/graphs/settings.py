@@ -35,7 +35,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# LOGGING 
+# LOGGING : set up location for all the logging messages
 LOG_FILE_LOCATION = '/var/log/remalm/'
 
 LOGGING = {
@@ -153,17 +153,8 @@ WSGI_APPLICATION = 'graphs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-""" DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST':'db',
-        'PORT':'5432',
-    }, 
-}
- """
+# using default db because of the small size of the project, 
+# might be useful to change it if the project grows
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -231,7 +222,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-""" LDAP SERVER CONFIG  """
+""" LDAP SERVER CONFIG SO INTRANET USERS CAN ACCESS THE APP """
 
 # The URL of the LDAP server(s).  List multiple servers for high availability ServerPool connection.
 LDAP_AUTH_URL = [config('LDAP_AUTH_URL')]
@@ -247,6 +238,9 @@ LDAP_AUTH_SEARCH_BASE = config('LDAP_SEARCH_BASE')
 LDAP_ALWAYS_SEARCH_BIND = True
 
 AUTH_LDAP_START_TLS = True
+
+
+# SETTINGS FOR DEPLOYMENT
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True

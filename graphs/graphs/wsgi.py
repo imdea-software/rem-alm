@@ -13,8 +13,6 @@ sys.path.append('/var/www/almgraphs/')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "graphs.settings")
 os.environ['HTTPS'] = "on"
 os.environ['wsgi.url_scheme'] = 'https'
-""" activate_this = '../../env/bin/activate'
-exec(activate_this, dict(__file__=activate_this)) """
 # exec(open("/var/www/almgraphs/env/bin/activate").read())
 from django.core.wsgi import get_wsgi_application
 
