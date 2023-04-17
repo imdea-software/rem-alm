@@ -40,7 +40,7 @@ class Profile(models.Model):
                             
             ],
                 "172.20.237.86":[
-                    {"1" : "CSIC - UC3M - IMDEA NETWORK - F1 - (1)"},
+                    {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1 (1))"},
                     {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
                     {"3" : "CSICJO F1 - (3)"},
                     {"4" : "CSICJO F2 - (4)"},
