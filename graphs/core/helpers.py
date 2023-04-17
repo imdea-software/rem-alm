@@ -154,7 +154,8 @@ def parse_faultanalysis(info):
     for data in info:
         if data.split('):')[0] == 'Trace Time FA (UTC':
             d = datetime.strptime(data.split('):')[1].strip(" "), "%Y-%m-%d %H:%M:%S")
-            d1 = d + timedelta(hours=1)
+            d1 = d + timedelta(hours=2)
+            print('before: ', d, ' after: ',d1)
             date = d1.strftime("%H:%M %d-%m-%Y")
             port_info.append(f"Timestamp: {date}")
         if data.split(':')[0] == 'Fault Position':

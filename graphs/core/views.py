@@ -29,8 +29,10 @@ def dashboard(request):
         'fa' : devices[1],
         'vista': member.view
     }
-
-    return render(request,'dashboard.html', data)
+    if request.user.profile:
+        return render(request,'dashboard.html', data)
+    else:
+        return render(request, "error/profile.html")
 
 
 @login_required
