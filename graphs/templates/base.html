@@ -22,7 +22,7 @@
 
     <!--  -->
     {% block extrahead %}{% endblock %}
-    <title>Gráficos ALM</title>
+    <title>Gráficos-ALM</title>
   </head>
   <body>
  <style>
@@ -31,7 +31,7 @@
 <header>
       <nav class="navbar-fixed z-depth-4">
         <div class="nav-wrapper indigo lighten-1">
-          <a href="{% url 'dashboard' %}" class="brand-logo left"><i class="material-icons" style="margin-left: 10px !important;">bug_report</i> Gráficos ALM</a>
+          <a href="{% url 'dashboard' %}" class="brand-logo left"><i class="material-icons" style="margin-left: 10px !important;">bug_report</i>Gráficos ALM</a>
           {% if user.is_authenticated %}
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {% if user.is_superuser %}

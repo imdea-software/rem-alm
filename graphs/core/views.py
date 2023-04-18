@@ -24,6 +24,7 @@ logger.addHandler(handler)
 def dashboard(request):
     member = request.user.profile
     devices = member.get_view()
+
     data = {
         'devices': devices[0],
         'fa' : devices[1],

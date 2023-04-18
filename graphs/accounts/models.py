@@ -7,6 +7,9 @@ VIEWS =(
     ("noc","NOC"),
     ("telefonica","TELEFONICA"),
     ("correos","CORREOS"),
+    ("indefinida_1", "INDEFINIDA 1"),
+    ("indefinida_2", "INDEFINIDA 2"),
+    ("indefinida_3", "INDEFINIDA 3"),
 )
 
 class Profile(models.Model):
@@ -37,21 +40,20 @@ class Profile(models.Model):
                     {"14" : "UPM F2 - (14)"},
                     {"15" : "UAM F1 - (15)"},
                     {"16" : "UAM F2 - (16)"}
-                            
             ],
                 "172.20.237.86":[
-                    {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1 (1))"},
-                    {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
-                    {"3" : "CSICJO F1 - (3)"},
-                    {"4" : "CSICJO F2 - (4)"},
-                    {"5" : "UCM F1 - (5)"},
-                    {"6" : "UCM F2 - (6)"}
+                    {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1"},
+                    {"2" : "CSIC - UC3M - IMDEA NETWORK - F2"},
+                    {"3" : "CSICJO F1"},
+                    {"4" : "CSICJO F2"},
+                    {"5" : "UCM F1"},
+                    {"6" : "UCM F2"}
             ]  
             }
             fa = True
             return devices, fa
         if self.view == 'telefonica':
-            # no puede hacer fault analysis
+            # si puede hacer fault analysis
             devices = {
                 "172.20.237.90":[
                     {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1 - (1)"},
@@ -60,14 +62,13 @@ class Profile(models.Model):
                     {"4" : "Imdea Software F2 - (4)"},
                     {"15" : "UAM F1 - (15)"},
                     {"16" : "UAM F2 - (16)"}
-                            
             ],
                 "172.20.237.86":[
-                    {"1" : "CSIC - UC3M - IMDEA NETWORK - F1 - (1)"},
+                    {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1 (1)"},
                     {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
                     {"3" : "CSICJO F1 - (3)"},
-                    {"4" : "CSICJO F2 - (4)"},
-            ]  
+                    {"4" : "CSICJO F2 - (4)"}
+            ]
             }
             fa = True
             return devices, fa
@@ -82,6 +83,40 @@ class Profile(models.Model):
             }
             fa = False
             return devices, fa
+        
+        if self.view == 'indefinida_1':
+            # no puede hacer fault analysis
+            # si quieres hacer FA manual fa = True
+            devices = {
+                "172.20.237.86":
+                [{
+                "5" : "UCM F1 - (5)"},
+                {"6" : "UCM F2 - (6)"}
+                ]}
+            fa = False
+            return devices, fa
+        
+        if self.view == 'indefinida_2':
+            # no puede hacer fault analysis
+            devices = {
+                "172.20.237.86":[
+                    {"5" : "UCM F1 - (5)"},
+                    {"6" : "UCM F2 - (6)"}
+            ]  
+            }
+            fa = False
+            return devices, fa
+        
+        if self.view == 'indefinida_3':
+            # no puede hacer fault analysis
+            devices = {
+                "172.20.237.86":[
+                    {"5" : "UCM F1 - (5)"},
+                    {"6" : "UCM F2 - (6)"}
+            ]  
+            }
+            fa = False
+            return devices, fa 
 
 
 

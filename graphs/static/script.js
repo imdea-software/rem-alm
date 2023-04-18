@@ -21,8 +21,8 @@ $(document).ready(function(){
                      
   ],
       "172.20.237.86":[
-          {"1" : "CSIC - UC3M - IMDEA NETWORK - F1 - (1)"},
-          {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
+          {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1 (1)"},
+          {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 (2)"},
           {"3" : "CSICJO F1 - (3)"},
           {"4" : "CSICJO F2 - (4)"},
           {"5" : "UCM F1 - (5)"},
@@ -32,8 +32,8 @@ $(document).ready(function(){
 
     var vista_telefonica = {
               "172.20.237.90":[
-                  {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1 - (1)"},
-                  {"2" : "CIEMAT-URJC-IMDEA NETWORK - F2 - (2)"},
+                  {"1" : "CIEMAT-URJC-IMDEA NETWORK - F1"},
+                  {"2" : "CIEMAT-URJC-IMDEA NETWORK - F2"},
                   {"3" : "Imdea Software F1 - (3)"},
                   {"4" : "Imdea Software F2 - (4)"},
                   {"15" : "UAM F1 - (15)"},
@@ -41,8 +41,8 @@ $(document).ready(function(){
                           
           ],
               "172.20.237.86":[
-                  {"1" : "CSIC - UC3M - IMDEA NETWORK - F1 - (1)"},
-                  {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 - (2)"},
+                  {"1" : "CSIC-UC3M-2017-06-F/UC3M-IMDEANET-2017-05-F1 (1)"},
+                  {"2" : "CSIC - UC3M - IMDEA NETWORK - F2 (2)"},
                   {"3" : "CSICJO F1 - (3)"},
                   {"4" : "CSICJO F2 - (4)"},
           ]  
@@ -55,6 +55,15 @@ $(document).ready(function(){
                   {"6" : "UCM F2 - (6)"}
           ]  
           }
+          var indefinida_1 = {
+            "172.20.237.86":[
+              {"5" : "UCM F1 - (5)"},
+              {"6" : "UCM F2 - (6)"}
+            ]  
+          }
+          var indefinida_2 = {}
+          var indefinida_3 = {}
+
 
 var ports = document.getElementById("address").value;
 var views = document.getElementById("vista").value;
@@ -90,6 +99,36 @@ if (views == 'noc' || views == 'ops'){
   }else if (views == 'correos'){
     for (var i=0;i<vista_correos[address].length; i++, min++){
       for (const [key, value] of Object.entries(vista_correos[address][i])) {
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.innerHTML = value;
+      select.appendChild(opt);
+      var instances = M.FormSelect.init(select, opt);
+      };
+    };
+  }else if (views == 'indefinida_1'){
+    for (var i=0;i<indefinida_1[address].length; i++, min++){
+      for (const [key, value] of Object.entries(indefinida_1[address][i])) {
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.innerHTML = value;
+      select.appendChild(opt);
+      var instances = M.FormSelect.init(select, opt);
+      };
+    };
+  }else if (views == 'indefinida_2'){
+    for (var i=0;i<indefinida_2[address].length; i++, min++){
+      for (const [key, value] of Object.entries(indefinida_2[address][i])) {
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.innerHTML = value;
+      select.appendChild(opt);
+      var instances = M.FormSelect.init(select, opt);
+      };
+    };
+  }else if (views == 'indefinida_3'){
+    for (var i=0;i<indefinida_3[address].length; i++, min++){
+      for (const [key, value] of Object.entries(indefinida_3[address][i])) {
       var opt = document.createElement('option');
       opt.value = key;
       opt.innerHTML = value;
